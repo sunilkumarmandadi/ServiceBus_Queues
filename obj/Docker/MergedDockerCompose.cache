@@ -1,0 +1,39 @@
+services:
+  portainer:
+    container_name: portainerServiceBus
+    image: portainer/portainer-ce
+    ports:
+    - published: 5150
+      target: 8000
+    - published: 4000
+      target: 9000
+    restart: always
+    volumes:
+    - portainer_data:/data:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+  servicebusmessagesender:
+    build:
+      context: C:\SUNIL\Practise\ServiceBusMessageReceiver\ServiceBusMessageReceiver
+      dockerfile: ServiceBusMessageSender/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: servicebusmessagesender
+    ports:
+    - target: 80
+    - target: 443
+    volumes:
+    - C:\Users\sunil\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\sunil\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+  sqlserver:
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Express
+      SA_PASSWORD: Sunsql@2021
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    ports:
+    - published: 1433
+      target: 1433
+version: '3.4'
+volumes:
+  portainer_data: {}

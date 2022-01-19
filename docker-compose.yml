@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  servicebusmessagesender:
+    image: ${DOCKER_REGISTRY-}servicebusmessagesender
+    build:
+      context: .
+      dockerfile: ServiceBusMessageSender/Dockerfile
+  
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"   
+  portainer:
+    image: portainer/portainer-ce
+
+volumes:
+  portainer_data:

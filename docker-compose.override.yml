@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  servicebusmessagesender:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  sqlserver:
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Sunsql@2021"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+  portainer:
+    container_name: portainerServiceBus
+    restart: always
+    ports:
+      - "5150:8000"
+      - "4000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data   
